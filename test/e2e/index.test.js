@@ -1,6 +1,7 @@
 'use strict';
 /* @flow */
 
+const fs = require('fs');
 const test = require('tape');
 const webDriver = require('../appium/web_driver.js');
 
@@ -17,6 +18,15 @@ test('APPIUM: check welcome message', t => {
       .getValue();
   }).then(value => {
     t.equal(value,'Welcome to React Native!');
+    t.end();
+  }).catch(t.end);
+});
+
+test('APPIUM: take screenshot', t => {
+  webDriver.getDriver().then(driver => {
+    return driver.takeScreenshot();
+  }).then(value => {
+    fs.writeFileSync('./test/_tmp/screenshot.png',value,'base64');
     t.end();
   }).catch(t.end);
 });
