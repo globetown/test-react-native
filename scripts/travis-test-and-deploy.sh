@@ -12,7 +12,6 @@ echo message "$MESSAGE"
 echo '=================='
 
 if [[ $TRAVIS_BRANCH = master || $TRAVIS_BRANCH =~ ^ready\/.+ ]]; then
-  npm run eslint
   defaults write com.apple.iphonesimulator ConnectHardwareKeyboard -bool NO
   echo "Building native app"
   $(dirname $0)/./build-tests.sh > /dev/null
