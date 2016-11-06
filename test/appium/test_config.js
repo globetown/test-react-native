@@ -24,17 +24,4 @@ module.exports = {
     automationName:'XCUITest'
   },
   APPIUM_PORT:4723,
-  // actions: {
-  //   login: {
-  //     actions: [{
-  //       type: 'AUTH_LOGIN_SUCCESS',
-  //       payload: {username: CREDENTIALS.username, token: CREDENTIALS.token}
-  //     }],
-  //     redirects: [{name: 'homePage'}]
-  //   },
-  //   logout: {
-  //     actions: [{type: 'AUTH_LOGOUT'}],
-  //     redirects: [{name: 'loginPage', params: {duration: 0}}]
-  //   }
-  // }
 };

@@ -9,15 +9,16 @@ const path = require('path');
 const {APPIUM_PORT,WEBDRIVER_CAPS,IS_TRAVIS} = require('./test_config');
 const APP_DIR = path.resolve('.');
 
-let driver;
-
 module.exports = {
   getDriver,
   createDriver,
-  stop,
   buildApp,
   startAppium,
+  stop,
 };
+
+let driver;
+let appiumChildProcess;
 
 function getDriver() {
   return new Promise(resolve => {
@@ -40,12 +41,6 @@ function createDriver() {
   });
 }
 
-function stop() {
-  return driver && driver.quit().catch(e => {
-    console.log('ERROR:STOP');
-  });
-}
-
 function buildApp() {
 
   try {
@@ -60,33 +55,33 @@ function buildApp() {
   return new Promise(resolve => {
     const build = spawn(APP_DIR + '/scripts/build-tests.sh');
     build.on('close',resolve);
-    build.stdout.pipe(process.stdout);
+    // build.stdout.pipe(process.stdout);
     build.stderr.pipe(process.stderr);
   });
 }
 
 function logsHandler(driver) {
   driver.on('status', info => {
-    console.log(info);
+    // console.log(info);
   });
   driver.on('command', (meth, path, data) => {
-    console.log(' > ' + meth.yellow, path.grey, data || '');
+    // console.log(' > ' + meth.yellow, path.grey, data || '');
   });
   driver.on('http', (meth, path, data) => {
-    console.log(' > ' + meth.magenta, path, (data || '').grey);
+    // console.log(' > ' + meth.magenta, path, (data || '').grey);
   });
 }
 
 function startAppium() {
   return checkPort(APPIUM_PORT).catch(error => {
     new Promise(resolve => {
-      const appium = spawn('appium');
-      process.on('exit',() => {
-        appium.kill('SIGHUP');
+      appiumChildProcess = spawn('appium');
+      process.on('exit', () => {
+        appiumChildProcess.kill('SIGHUP');
       });
-      appium.stderr.pipe(process.stderr);
-      appium.stdout.pipe(process.stdout);
+      appiumChildProcess.stderr.pipe(process.stderr);
       if (IS_TRAVIS) {
+        // appium.stdout.pipe(process.stdout);
       }
       resolve();
     })
@@ -114,4 +109,10 @@ function createWebDriver() {
   driver = wd.promiseChainRemote(serverConfig);
   logsHandler(driver);
   return driver.init(WEBDRIVER_CAPS);
+}
+
+function stop() {
+  return driver.quit().then(() => {
+    return appiumChildProcess.kill('SIGHUP');
+  });
 }
