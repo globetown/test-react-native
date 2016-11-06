@@ -12,7 +12,6 @@ echo message "$MESSAGE"
 echo '=================='
 
 if [[ $TRAVIS_BRANCH = master || $TRAVIS_BRANCH =~ ^ready\/.+ ]]; then
-  npm run eslint
   defaults write com.apple.iphonesimulator ConnectHardwareKeyboard -bool NO
   echo "Building native app"
   $(dirname $0)/./build-tests.sh > /dev/null
@@ -21,7 +20,7 @@ fi
 
 if [[ $TRAVIS_BRANCH = master ]]; then
   gem update fastlane
-  /usr/libexec/PlistBuddy -c "Set CFBundleVersion $TRAVIS_BUILD_NUMBER" ./ios/ReactNativeStarterKit/Info.plist
+  /usr/libexec/PlistBuddy -c "Set CFBundleVersion $TRAVIS_BUILD_NUMBER" ./ios/ReactNativeTest/Info.plist
   npm run deploy
 fi
 
