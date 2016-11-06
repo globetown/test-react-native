@@ -20,7 +20,7 @@ fi
 
 if [[ $TRAVIS_BRANCH = master ]]; then
   gem update fastlane
-  /usr/libexec/PlistBuddy -c "Set CFBundleVersion $TRAVIS_BUILD_NUMBER" ./ios/ReactNativeStarterKit/Info.plist
+  /usr/libexec/PlistBuddy -c "Set CFBundleVersion $TRAVIS_BUILD_NUMBER" ./ios/ReactNativeTest/Info.plist
   npm run deploy
 fi
 
