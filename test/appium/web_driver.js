@@ -6,7 +6,7 @@ const {spawn} = require('child_process');
 const net = require('net');
 const fs = require('fs');
 const path = require('path');
-const {APPIUM_PORT,WEBDRIVER_CAPS,IS_TRAVIS} = require('./test_config');
+const {APPIUM_PORT,IOS,ANDROID,IS_TRAVIS} = require('./test_config');
 const APP_DIR = path.resolve('.');
 
 module.exports = {
@@ -42,22 +42,22 @@ function createDriver() {
 }
 
 function buildApp() {
-
-  try {
-    const buildDir = fs.readdirSync(APP_DIR + '/' + WEBDRIVER_CAPS.app);
-    if (buildDir.length) {
+  // TODO: change android to file path
+  // try {
+  //   const buildDir = fs.readdirSync(APP_DIR + '/' + ANDROID.app);
+  //   if (buildDir.length) {
       return Promise.resolve();
-    }
-  } catch (error) {
-    return Promise.reject(error);
-  }
+  //   }
+  // } catch (error) {
+  //   return Promise.reject(error);
+  // }
 
-  return new Promise(resolve => {
-    const build = spawn(APP_DIR + '/scripts/build-tests.sh');
-    build.on('close',resolve);
-    // build.stdout.pipe(process.stdout);
-    build.stderr.pipe(process.stderr);
-  });
+  // return new Promise(resolve => {
+  //   const build = spawn(APP_DIR + '/scripts/build-tests.sh');
+  //   build.on('close',resolve);
+  //   build.stdout.pipe(process.stdout);
+  //   build.stderr.pipe(process.stderr);
+  // });
 }
 
 function logsHandler(driver) {
@@ -80,8 +80,8 @@ function startAppium() {
         appiumChildProcess.kill('SIGHUP');
       });
       appiumChildProcess.stderr.pipe(process.stderr);
+      appiumChildProcess.stdout.pipe(process.stdout);
       if (IS_TRAVIS) {
-        // appium.stdout.pipe(process.stdout);
       }
       resolve();
     })
@@ -108,7 +108,7 @@ function createWebDriver() {
   const serverConfig = {host:'localhost',port:4723};
   driver = wd.promiseChainRemote(serverConfig);
   logsHandler(driver);
-  return driver.init(WEBDRIVER_CAPS);
+  return driver.init(ANDROID);
 }
 
 function stop() {

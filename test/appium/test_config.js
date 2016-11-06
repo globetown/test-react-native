@@ -7,7 +7,8 @@ process.env.APP_NAME = process.env.APP_NAME || 'ReactNativeTest.app';
 
 module.exports = {
   IS_TRAVIS:process.env.TRAVIS,
-  WEBDRIVER_CAPS:{
+  APPIUM_PORT:4723,
+  IOS:{
     newCommandTimeout:60,
     browserName:'',
     platformName:'iOS',
@@ -23,5 +24,15 @@ module.exports = {
     autoAcceptAlerts:true,
     automationName:'XCUITest'
   },
-  APPIUM_PORT:4723,
+  ANDROID:{
+    newCommandTimeout:60,
+    browserName:'',
+    platformName:'Android',
+    platformVersion:'6.0',
+    deviceName:'Android Emulator',
+    app:'android/app/build/outputs/apk/app-debug.apk',
+    locale:'en_US',
+    language:'en',
+    autoAcceptAlerts:true,
+  },
 };
