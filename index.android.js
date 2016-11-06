@@ -15,8 +15,8 @@ import {
 export default class ReactNativeTest extends Component {
   render() {
     return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
+      <View style={styles.container} testID='Home'>
+        <Text style={styles.welcome} testID='Welcome'>
           Welcome to React Native!
         </Text>
         <Text style={styles.instructions}>
